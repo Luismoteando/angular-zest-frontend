@@ -8,6 +8,8 @@ Consists of a front-end Angular application, working together with the back end:
 
 ## Code status
 
+[![Build Status](https://travis-ci.org/luismoteando/angular-zest-frontend.svg?branch=develop)](https://travis-ci.org/luismoteando/angular-zest-frontend)
+
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.

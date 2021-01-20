@@ -1,0 +1,17 @@
+language: node_js
+node_js:
+  - '14'
+addons:
+  chrome: stable
+branches:
+  only:
+    - develop
+    - /^release-[0-999].[0-999]$/
+    - master
+notifications:
+  email:
+    recipients:
+      - luismiguel.ortiz.rozalen@alumnos.upm.es
+script:
+  - ng test --watch=false --no-progress --browsers=ChromeHeadlessNoSandbox
+  - ng e2e --protractor-config=e2e/protractor-travis.conf.js
