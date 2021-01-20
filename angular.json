@@ -120,5 +120,8 @@
       }
     }
   },
-  "defaultProject": "angular-zest-frontend"
+  "defaultProject": "angular-zest-frontend",
+  "cli": {
+    "analytics": false
+  }
 }
