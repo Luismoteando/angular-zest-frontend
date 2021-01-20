@@ -8,7 +8,7 @@ Consists of a front-end Angular application, working together with the back end:
 
 ## Code status
 
-[![Build Status](https://travis-ci.org/luismoteando/angular-zest-frontend.svg?branch=develop)](https://travis-ci.org/luismoteando/angular-zest-frontend)
+[![Build Status](https://travis-ci.com/Luismoteando/angular-zest-frontend.svg?branch=develop)](https://travis-ci.com/Luismoteando/angular-zest-frontend)
 [![](https://img.shields.io/static/v1?label=Heroku&message=v1.0.0-SNAPSHOT&color=green)](https://zest-workout-planner.herokuapp.com) 
 
 ## Development server
