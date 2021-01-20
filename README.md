@@ -8,7 +8,7 @@ Consists of a front-end Angular application, working together with the back end:
 
 ## Code status
 
-[![Build Status](https://travis-ci.org/luismoteando/angular-zest-frontend.svg?branch=develop)](https://travis-ci.org/luismoteando/angular-zest-frontend)
+[![Build Status](https://travis-ci.com/Luismoteando/angular-zest-frontend.svg?branch=develop)](https://travis-ci.com/Luismoteando/angular-zest-frontend)
 
 ## Development server
 
