@@ -1,2 +1,170 @@
-<app-scheduler-header></app-scheduler-header>
-<p>scheduler works!</p>
+<app-scheduler-header [(view)]="view" [(viewDate)]="viewDate" xmlns="">
+</app-scheduler-header>
+
+<context-menu #basicMenu>
+  <ng-template (execute)="addWorkoutSession($event.item)" contextMenuItem>
+    New workout
+  </ng-template>
+</context-menu>
+
+<ng-template
+    #monthCellTemplate
+    let-day="day"
+    let-eventClicked="eventClicked"
+    let-highlightDay="highlightDay"
+    let-locale="locale"
+    let-openDay="openDay"
+    let-tooltipPlacement="tooltipPlacement"
+    let-unhighlightDay="unhighlightDay">
+  <div
+    [contextMenuSubject]="day.date"
+    [contextMenu]="basicMenu"
+    class="fill-height">
+    <div class="cal-cell-top">
+    <span *ngIf="day.badgeTotal > 0" class="cal-day-badge">
+      {{ day.badgeTotal }}
+    </span>
+      <span class="cal-day-number">
+        {{ day.date | calendarDate:'monthViewDayNumber': locale }}
+      </span>
+    </div>
+    <div class="cal-events">
+      <div
+        (click)="$event.stopPropagation(); eventClicked.emit({event: event})"
+        (mouseenter)="highlightDay.emit({event: event})"
+        (mouseleave)="unhighlightDay.emit({event: event})"
+        *ngFor="let event of day.events"
+        [mwlCalendarTooltip]="event.title | calendarEventTitle:'monthTooltip':event"
+        [ngClass]="event?.cssClass"
+        [style.backgroundColor]="event.color.primary"
+        [tooltipPlacement]="tooltipPlacement"
+        class="cal-event"
+      ></div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template
+    #weekHeaderTemplate
+    let-dayHeaderClicked="dayHeaderClicked"
+    let-days="days"
+    let-locale="locale">
+  <div class="cal-day-headers">
+    <div
+      (click)="dayHeaderClicked.emit({day: day})"
+      *ngFor="let day of days"
+      [class.cal-future]="day.isFuture"
+      [class.cal-past]="day.isPast"
+      [class.cal-today]="day.isToday"
+      [class.cal-weekend]="day.isWeekend"
+      [contextMenuSubject]="day.date"
+      [contextMenu]="basicMenu"
+      class="cal-header">
+      <b>{{ day.date | calendarDate:'weekViewColumnHeader':locale }}</b>
+      <br/>
+      <span>
+        {{ day.date | calendarDate:'weekViewColumnSubHeader':locale }}
+      </span>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template
+    #dayHourSegmentTemplate
+    let-locale="locale"
+    let-segment="segment"
+    let-segmentHeight="segmentHeight">
+  <div
+    [class.cal-after-hour-start]="!segment.isStart"
+    [class.cal-hour-start]="segment.isStart"
+    [contextMenuSubject]="segment.date"
+    [contextMenu]="basicMenu"
+    [ngClass]="segment.cssClass"
+    [style.height.px]="segmentHeight"
+    class="cal-hour-segment">
+    <div class="cal-time">
+      {{ segment.date | calendarDate: 'dayViewHour': locale }}
+    </div>
+  </div>
+</ng-template>
+
+<ng-template
+    #weekViewHourSegment
+    let-isTimeLabel="isTimeLabel"
+    let-locale="locale"
+    let-segment="segment"
+    let-segmentHeight="segmentHeight">
+  <div
+    [class.cal-after-hour-start]="!segment.isStart"
+    [class.cal-hour-start]="segment.isStart"
+    [contextMenuSubject]="segment.date"
+    [contextMenu]="basicMenu"
+    [ngClass]="segment.cssClass"
+    [style.height.px]="segmentHeight"
+    class="cal-hour-segment">
+    <div *ngIf="isTimeLabel" class="cal-time">
+      {{ segment.date | calendarDate: 'weekViewHour': locale }}
+    </div>
+  </div>
+</ng-template>
+
+<div [ngSwitch]="view">
+  <mwl-calendar-month-view
+    (dayClicked)="changeDay($event.day.date)"
+    (eventClicked)="handleWorkoutSession('Clicked', $event.event)"
+    (eventTimesChanged)="workoutSessionTimesChanged($event)"
+    *ngSwitchCase="CalendarView.Month"
+    [cellTemplate]="monthCellTemplate"
+    [events]="workoutSessions"
+    [refresh]="refresh"
+    [viewDate]="viewDate"
+    [weekStartsOn]="weekStartsOn"
+    [weekendDays]="weekendDays">
+  </mwl-calendar-month-view>
+  <mwl-calendar-week-view
+    (dayHeaderClicked)="changeDay($event.day.date)"
+    (eventClicked)="handleWorkoutSession('Clicked', $event.event)"
+    (eventTimesChanged)="workoutSessionTimesChanged($event)"
+    *ngSwitchCase="CalendarView.Week"
+    [events]="workoutSessions"
+    [headerTemplate]="weekHeaderTemplate"
+    [hourSegmentTemplate]="weekViewHourSegment"
+    [refresh]="refresh"
+    [viewDate]="viewDate"
+    [weekStartsOn]="weekStartsOn"
+    [weekendDays]="weekendDays">
+  </mwl-calendar-week-view>
+  <mwl-calendar-day-view
+    (eventClicked)="handleWorkoutSession('Clicked', $event.event)"
+    (eventTimesChanged)="workoutSessionTimesChanged($event)"
+    *ngSwitchCase="CalendarView.Day"
+    [events]="workoutSessions"
+    [hourSegmentTemplate]="dayHourSegmentTemplate"
+    [refresh]="refresh"
+    [viewDate]="viewDate">
+  </mwl-calendar-day-view>
+</div>
+
+<ng-template #modalContent let-close="close">
+  <div class="modal-header">
+    <h5 class="modal-title">Event action occurred</h5>
+    <button (click)="close()" class="close" type="button">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div>
+      Action:
+      <pre>{{ modalData?.action }}</pre>
+    </div>
+    <div>
+      Event:
+      <pre>{{ modalData?.event | json }}</pre>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button (click)="close()" class="btn btn-outline-secondary" type="button">
+      OK
+    </button>
+  </div>
+</ng-template>

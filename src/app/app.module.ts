@@ -11,6 +11,7 @@ import {CalendarModule, DateAdapter} from 'angular-calendar';
 import {adapterFactory} from 'angular-calendar/date-adapters/date-fns';
 import {AppRoutingModule} from './app-routing.module';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import {ContextMenuModule} from 'ngx-contextmenu';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
     BrowserModule,
     CalendarModule.forRoot({provide: DateAdapter, useFactory: adapterFactory}),
     AppRoutingModule,
-    NgbModule
+    NgbModule,
+    ContextMenuModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]
