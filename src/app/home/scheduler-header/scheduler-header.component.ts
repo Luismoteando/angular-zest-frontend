@@ -1,16 +1,22 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {CalendarView} from 'angular-calendar';
 
 @Component({
   selector: 'app-scheduler-header',
   templateUrl: './scheduler-header.component.html',
   styleUrls: ['./scheduler-header.component.css']
 })
-export class SchedulerHeaderComponent implements OnInit {
+export class SchedulerHeaderComponent {
 
-  constructor() {
-  }
+  @Input() view: CalendarView;
 
-  ngOnInit(): void {
-  }
+  @Input() viewDate: Date;
 
+  @Input() locale = 'en';
+
+  @Output() viewChange = new EventEmitter<CalendarView>();
+
+  @Output() viewDateChange = new EventEmitter<Date>();
+
+  CalendarView = CalendarView;
 }
