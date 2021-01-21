@@ -7,6 +7,10 @@ import {Component, OnInit} from '@angular/core';
 })
 export class NavigationBarComponent implements OnInit {
 
+  name: any = 'Luis Miguel';
+  surname: any = 'Ortiz Rozalén';
+  isNavbarCollapsed: any = true;
+
   constructor() {
   }
 
