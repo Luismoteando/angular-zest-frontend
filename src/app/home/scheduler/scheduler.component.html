@@ -111,7 +111,7 @@
 <div [ngSwitch]="view">
   <mwl-calendar-month-view
     (dayClicked)="changeDay($event.day.date)"
-    (eventClicked)="handleWorkoutSession('Clicked', $event.event)"
+    (eventClicked)="updateSession($event.event)"
     (eventTimesChanged)="workoutSessionTimesChanged($event)"
     *ngSwitchCase="CalendarView.Month"
     [cellTemplate]="monthCellTemplate"
@@ -123,7 +123,7 @@
   </mwl-calendar-month-view>
   <mwl-calendar-week-view
     (dayHeaderClicked)="changeDay($event.day.date)"
-    (eventClicked)="handleWorkoutSession('Clicked', $event.event)"
+    (eventClicked)="updateSession($event.event)"
     (eventTimesChanged)="workoutSessionTimesChanged($event)"
     *ngSwitchCase="CalendarView.Week"
     [events]="workoutSessions"
@@ -135,7 +135,7 @@
     [weekendDays]="weekendDays">
   </mwl-calendar-week-view>
   <mwl-calendar-day-view
-    (eventClicked)="handleWorkoutSession('Clicked', $event.event)"
+    (eventClicked)="updateSession($event.event)"
     (eventTimesChanged)="workoutSessionTimesChanged($event)"
     *ngSwitchCase="CalendarView.Day"
     [events]="workoutSessions"
