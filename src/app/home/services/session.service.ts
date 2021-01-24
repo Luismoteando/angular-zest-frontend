@@ -15,4 +15,8 @@ export class SessionService {
   readAll(): Observable<Session[]> {
     return this.httpService.get(AppEndpoints.SESSIONS);
   }
+
+  create(session: Session): Observable<Session> {
+    return this.httpService.post(AppEndpoints.SESSIONS, session);
+  }
 }
