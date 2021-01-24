@@ -6,12 +6,14 @@ import {HomeComponent} from './home/home.component';
 import {FooterComponent} from './home/footer/footer.component';
 import {NavigationBarComponent} from './home/navigation-bar/navigation-bar.component';
 import {SchedulerComponent} from './home/scheduler/scheduler.component';
-import {SchedulerHeaderComponent} from './home/scheduler-header/scheduler-header.component';
+import {SchedulerHeaderComponent} from './home/scheduler/scheduler-header/scheduler-header.component';
 import {CalendarModule, DateAdapter} from 'angular-calendar';
 import {adapterFactory} from 'angular-calendar/date-adapters/date-fns';
 import {AppRoutingModule} from './app-routing.module';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {ContextMenuModule} from 'ngx-contextmenu';
+import {ToastComponent} from './home/toast/toast.component';
+import {ToastService} from './home/services/toast.service';
 
 @NgModule({
   declarations: [
@@ -20,7 +22,8 @@ import {ContextMenuModule} from 'ngx-contextmenu';
     FooterComponent,
     NavigationBarComponent,
     SchedulerComponent,
-    SchedulerHeaderComponent
+    SchedulerHeaderComponent,
+    ToastComponent
   ],
   imports: [
     BrowserModule,
@@ -29,7 +32,7 @@ import {ContextMenuModule} from 'ngx-contextmenu';
     NgbModule,
     ContextMenuModule.forRoot()
   ],
-  providers: [],
+  providers: [ToastService],
   bootstrap: [AppComponent]
 })
 export class AppModule {
