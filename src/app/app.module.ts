@@ -16,6 +16,8 @@ import {ToastComponent} from './home/toast/toast.component';
 import {ToastService} from './home/services/toast.service';
 import {HttpService} from './home/services/http.service';
 import {HttpClientModule} from '@angular/common/http';
+import {SessionCreationDialogComponent} from './home/sessions/session-creation-dialog.component';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 
 @NgModule({
@@ -26,7 +28,8 @@ import {HttpClientModule} from '@angular/common/http';
     NavigationBarComponent,
     SchedulerComponent,
     SchedulerHeaderComponent,
-    ToastComponent
+    ToastComponent,
+    SessionCreationDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -34,7 +37,9 @@ import {HttpClientModule} from '@angular/common/http';
     AppRoutingModule,
     NgbModule,
     ContextMenuModule.forRoot(),
-    HttpClientModule
+    HttpClientModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
   providers: [ToastService, HttpService],
   bootstrap: [AppComponent]

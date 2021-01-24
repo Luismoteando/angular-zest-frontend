@@ -11,6 +11,7 @@ import {
   DAYS_OF_WEEK
 } from 'angular-calendar';
 import {SessionService} from '../services/session.service';
+import {SessionCreationDialogComponent} from '../sessions/session-creation-dialog.component';
 
 const colors: any = {
   green: {
@@ -116,21 +117,15 @@ export class SchedulerComponent implements OnInit {
     this.modal.open(this.modalContent, {size: 'lg'});
   }
 
-  addWorkoutSession(date: Date): void {
-    this.workoutSessions.push(
-      {
-        start: date,
-        end: addHours(date, 1),
-        title: 'New event',
-        color: colors.red,
-        draggable: true,
-        resizable: {
-          beforeStart: true,
-          afterEnd: true,
-        }
-      }
-    );
-    this.refresh.next();
+  addSession(date: Date): void {
+    const createSessionModal = this.modal.open(SessionCreationDialogComponent);
+    createSessionModal.componentInstance.start = date;
+
+    createSessionModal.result.then(() => {
+      this.refresh.next();
+    }).catch((error) => {
+      console.log(error);
+    });
   }
 
   changeDay(date: Date) {
