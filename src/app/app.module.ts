@@ -14,6 +14,8 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {ContextMenuModule} from 'ngx-contextmenu';
 import {ToastComponent} from './home/toast/toast.component';
 import {ToastService} from './home/services/toast.service';
+import {HttpService} from './home/services/http.service';
+
 
 @NgModule({
   declarations: [
@@ -32,7 +34,7 @@ import {ToastService} from './home/services/toast.service';
     NgbModule,
     ContextMenuModule.forRoot()
   ],
-  providers: [ToastService],
+  providers: [ToastService, HttpService],
   bootstrap: [AppComponent]
 })
 export class AppModule {
