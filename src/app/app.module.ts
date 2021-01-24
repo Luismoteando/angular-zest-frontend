@@ -15,6 +15,7 @@ import {ContextMenuModule} from 'ngx-contextmenu';
 import {ToastComponent} from './home/toast/toast.component';
 import {ToastService} from './home/services/toast.service';
 import {HttpService} from './home/services/http.service';
+import {HttpClientModule} from '@angular/common/http';
 
 
 @NgModule({
@@ -32,7 +33,8 @@ import {HttpService} from './home/services/http.service';
     CalendarModule.forRoot({provide: DateAdapter, useFactory: adapterFactory}),
     AppRoutingModule,
     NgbModule,
-    ContextMenuModule.forRoot()
+    ContextMenuModule.forRoot(),
+    HttpClientModule
   ],
   providers: [ToastService, HttpService],
   bootstrap: [AppComponent]

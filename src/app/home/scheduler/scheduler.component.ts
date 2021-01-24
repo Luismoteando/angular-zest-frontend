@@ -1,5 +1,5 @@
-import {ChangeDetectionStrategy, Component, TemplateRef, ViewChild} from '@angular/core';
-import {addDays, addHours, endOfMonth, startOfDay, subDays} from 'date-fns';
+import {ChangeDetectionStrategy, Component, OnInit, TemplateRef, ViewChild} from '@angular/core';
+import {addHours} from 'date-fns';
 import {Subject} from 'rxjs';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {
@@ -10,20 +10,13 @@ import {
   CalendarView,
   DAYS_OF_WEEK
 } from 'angular-calendar';
+import {SessionService} from '../services/session.service';
 
 const colors: any = {
-  red: {
-    primary: '#ad2121',
-    secondary: '#FAE3E3',
-  },
-  blue: {
-    primary: '#1e90ff',
-    secondary: '#D1E8FF',
-  },
-  yellow: {
-    primary: '#e3bc08',
-    secondary: '#FDF1BA',
-  },
+  green: {
+    primary: '#7b8a8b',
+    secondary: '#ecf0f1',
+  }
 };
 
 @Component({
@@ -33,7 +26,7 @@ const colors: any = {
   styleUrls: ['./scheduler.component.css'],
   providers: [CalendarDateFormatter]
 })
-export class SchedulerComponent {
+export class SchedulerComponent implements OnInit {
   @ViewChild('modalContent', {static: true}) modalContent: TemplateRef<any>;
 
   view: CalendarView = CalendarView.Month;
@@ -71,48 +64,33 @@ export class SchedulerComponent {
     },
   ];
 
-  workoutSessions: CalendarEvent[] = [
-    {
-      start: subDays(startOfDay(new Date()), 1),
-      end: addDays(new Date(), 1),
-      title: 'A 3 day event',
-      color: colors.red,
-      actions: this.actions,
-      allDay: true,
-      resizable: {
-        beforeStart: true,
-        afterEnd: true,
-      },
-      draggable: true,
-    },
-    {
-      start: startOfDay(new Date()),
-      title: 'An event with no end date',
-      color: colors.yellow,
-      actions: this.actions,
-    },
-    {
-      start: subDays(endOfMonth(new Date()), 3),
-      end: addDays(endOfMonth(new Date()), 3),
-      title: 'A long event that spans 2 months',
-      color: colors.blue,
-      allDay: true,
-    },
-    {
-      start: addHours(startOfDay(new Date()), 2),
-      end: addHours(new Date(), 2),
-      title: 'A draggable and resizable event',
-      color: colors.yellow,
-      actions: this.actions,
-      resizable: {
-        beforeStart: true,
-        afterEnd: true,
-      },
-      draggable: true,
-    },
-  ];
+  workoutSessions: CalendarEvent[] = [];
 
-  constructor(private modal: NgbModal) {
+  constructor(
+    private modal: NgbModal,
+    private sessionService: SessionService) {
+  }
+
+  ngOnInit(): void {
+    this.sessionService.readAll().subscribe(sessions => {
+      sessions.forEach(session => {
+        this.workoutSessions.push(
+          {
+            id: session.id,
+            title: session.title,
+            start: new Date(session.start),
+            end: addHours(new Date(session.start), 2),
+            color: colors.green,
+            draggable: true,
+            resizable: {
+              beforeStart: true,
+              afterEnd: true
+            },
+          }
+        );
+      });
+      this.refresh.next();
+    });
   }
 
   workoutSessionTimesChanged({
