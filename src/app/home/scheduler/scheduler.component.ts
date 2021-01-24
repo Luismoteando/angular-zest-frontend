@@ -12,6 +12,7 @@ import {
 } from 'angular-calendar';
 import {SessionService} from '../services/session.service';
 import {SessionCreationDialogComponent} from '../sessions/session-creation-dialog.component';
+import {SessionEditionDialogComponent} from '../sessions/session-edition-dialog.component';
 
 const colors: any = {
   green: {
@@ -122,6 +123,17 @@ export class SchedulerComponent implements OnInit {
     createSessionModal.componentInstance.start = date;
 
     createSessionModal.result.then(() => {
+      this.refresh.next();
+    }).catch((error) => {
+      console.log(error);
+    });
+  }
+
+  updateSession(event: CalendarEvent) {
+    const editSessionModal = this.modal.open(SessionEditionDialogComponent);
+    editSessionModal.componentInstance.id = String(event.id);
+
+    editSessionModal.result.then(() => {
       this.refresh.next();
     }).catch((error) => {
       console.log(error);

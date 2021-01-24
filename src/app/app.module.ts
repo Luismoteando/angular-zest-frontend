@@ -18,6 +18,7 @@ import {HttpService} from './home/services/http.service';
 import {HttpClientModule} from '@angular/common/http';
 import {SessionCreationDialogComponent} from './home/sessions/session-creation-dialog.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {SessionEditionDialogComponent} from './home/sessions/session-edition-dialog.component';
 
 
 @NgModule({
@@ -29,7 +30,8 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
     SchedulerComponent,
     SchedulerHeaderComponent,
     ToastComponent,
-    SessionCreationDialogComponent
+    SessionCreationDialogComponent,
+    SessionEditionDialogComponent
   ],
   imports: [
     BrowserModule,
