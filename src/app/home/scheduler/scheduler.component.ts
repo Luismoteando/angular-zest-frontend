@@ -2,17 +2,11 @@ import {ChangeDetectionStrategy, Component, OnInit, TemplateRef, ViewChild} from
 import {addHours} from 'date-fns';
 import {Subject} from 'rxjs';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {
-  CalendarDateFormatter,
-  CalendarEvent,
-  CalendarEventAction,
-  CalendarEventTimesChangedEvent,
-  CalendarView,
-  DAYS_OF_WEEK
-} from 'angular-calendar';
+import {CalendarDateFormatter, CalendarEvent, CalendarEventTimesChangedEvent, CalendarView, DAYS_OF_WEEK} from 'angular-calendar';
 import {SessionService} from '../services/session.service';
 import {SessionCreationDialogComponent} from '../sessions/session-creation-dialog.component';
 import {SessionEditionDialogComponent} from '../sessions/session-edition-dialog.component';
+import {SessionDeletionDialogComponent} from '../sessions/session-deletion-dialog.component';
 
 const colors: any = {
   green: {
@@ -29,7 +23,8 @@ const colors: any = {
   providers: [CalendarDateFormatter]
 })
 export class SchedulerComponent implements OnInit {
-  @ViewChild('modalContent', {static: true}) modalContent: TemplateRef<any>;
+
+  @ViewChild('optionsModal', {static: true}) modalContent: TemplateRef<any>;
 
   view: CalendarView = CalendarView.Month;
 
@@ -37,34 +32,13 @@ export class SchedulerComponent implements OnInit {
 
   viewDate: Date = new Date();
 
-  modalData: {
-    action: string;
-    event: CalendarEvent;
-  };
+  modalData: { event: CalendarEvent<any> };
 
   weekStartsOn: number = DAYS_OF_WEEK.MONDAY;
 
   weekendDays: number[] = [DAYS_OF_WEEK.FRIDAY, DAYS_OF_WEEK.SATURDAY];
 
   refresh: Subject<any> = new Subject();
-
-  actions: CalendarEventAction[] = [
-    {
-      label: '<i class="fas fa-fw fa-pencil-alt"></i>',
-      a11yLabel: 'Edit',
-      onClick: ({event}: { event: CalendarEvent }): void => {
-        this.handleWorkoutSession('Edited', event);
-      },
-    },
-    {
-      label: '<i class="fas fa-fw fa-trash-alt"></i>',
-      a11yLabel: 'Delete',
-      onClick: ({event}: { event: CalendarEvent }): void => {
-        this.workoutSessions = this.workoutSessions.filter((iEvent) => iEvent !== event);
-        this.handleWorkoutSession('Deleted', event);
-      },
-    },
-  ];
 
   workoutSessions: CalendarEvent[] = [];
 
@@ -74,6 +48,11 @@ export class SchedulerComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.fetchSessions();
+  }
+
+  fetchSessions() {
+    this.workoutSessions = [];
     this.sessionService.readAll().subscribe(sessions => {
       sessions.forEach(session => {
         this.workoutSessions.push(
@@ -110,12 +89,11 @@ export class SchedulerComponent implements OnInit {
       }
       return iEvent;
     });
-    this.handleWorkoutSession('Dropped or resized', event);
   }
 
-  handleWorkoutSession(action: string, workoutSession: CalendarEvent): void {
-    this.modalData = {event: workoutSession, action};
-    this.modal.open(this.modalContent, {size: 'lg'});
+  handleWorkoutSession(workoutSession: CalendarEvent): void {
+    this.modalData = {event: workoutSession};
+    this.modal.open(this.modalContent, {size: 'sm'});
   }
 
   addSession(date: Date): void {
@@ -123,7 +101,7 @@ export class SchedulerComponent implements OnInit {
     createSessionModal.componentInstance.start = date;
 
     createSessionModal.result.then(() => {
-      this.refresh.next();
+      this.fetchSessions();
     }).catch((error) => {
       console.log(error);
     });
@@ -134,10 +112,23 @@ export class SchedulerComponent implements OnInit {
     editSessionModal.componentInstance.id = String(event.id);
 
     editSessionModal.result.then(() => {
-      this.refresh.next();
+      this.fetchSessions();
     }).catch((error) => {
       console.log(error);
     });
+  }
+
+  deleteSession(event: CalendarEvent) {
+    const deleteSessionModal = this.modal.open(SessionDeletionDialogComponent);
+    deleteSessionModal.componentInstance.id = String(event.id);
+
+    deleteSessionModal.result.then(() => {
+      this.fetchSessions();
+    }).catch((error) => {
+      console.log(error);
+    });
+
+    this.refresh.next();
   }
 
   changeDay(date: Date) {

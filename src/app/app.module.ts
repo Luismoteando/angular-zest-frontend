@@ -19,6 +19,7 @@ import {HttpClientModule} from '@angular/common/http';
 import {SessionCreationDialogComponent} from './home/sessions/session-creation-dialog.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {SessionEditionDialogComponent} from './home/sessions/session-edition-dialog.component';
+import {SessionDeletionDialogComponent} from './home/sessions/session-deletion-dialog.component';
 
 
 @NgModule({
@@ -31,7 +32,8 @@ import {SessionEditionDialogComponent} from './home/sessions/session-edition-dia
     SchedulerHeaderComponent,
     ToastComponent,
     SessionCreationDialogComponent,
-    SessionEditionDialogComponent
+    SessionEditionDialogComponent,
+    SessionDeletionDialogComponent
   ],
   imports: [
     BrowserModule,

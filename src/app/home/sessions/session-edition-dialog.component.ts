@@ -36,7 +36,7 @@ export class SessionEditionDialogComponent implements OnInit {
 
   updateSession() {
     this.sessionService.update(this.session).subscribe(
-      () => this.activeModal.close()
+      () => this.activeModal.close('Dialog closed')
       , () => this.toastService.showError('Oops, something bad happened. There are no exercises with that id.')
       , () => this.toastService.showSuccess('Session updated successfully!')
     );
