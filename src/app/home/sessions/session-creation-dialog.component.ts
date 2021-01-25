@@ -32,7 +32,7 @@ export class SessionCreationDialogComponent implements OnInit {
   createSession() {
     this.newSession.sessionExerciseIds.push(this.formGroup.value.sessionExerciseIds);
     this.sessionService.create(this.newSession).subscribe(
-      () => this.activeModal.close()
+      () => this.activeModal.close('Dialog closed')
       , () => this.toastService.showError('Oops, something bad happened. There are no exercises with that id.')
       , () => this.toastService.showSuccess('Session created successfully!')
     );

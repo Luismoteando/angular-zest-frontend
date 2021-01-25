@@ -27,4 +27,8 @@ export class SessionService {
   update(session: Session) {
     return this.httpService.put(AppEndpoints.SESSIONS + '/' + session.id, session);
   }
+
+  delete(id: string) {
+    return this.httpService.delete(AppEndpoints.SESSIONS + '/' + id);
+  }
 }
