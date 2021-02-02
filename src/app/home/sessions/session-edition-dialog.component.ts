@@ -35,11 +35,21 @@ export class SessionEditionDialogComponent implements OnInit {
   }
 
   updateSession() {
+    this.session = this.getGroupFormValues();
     this.sessionService.update(this.session).subscribe(
       () => this.activeModal.close('Dialog closed')
       , () => this.toastService.showError('Oops, something bad happened. There are no exercises with that id.')
       , () => this.toastService.showSuccess('Session updated successfully!')
     );
+  }
+
+  private getGroupFormValues(): Session {
+    return {
+      id: this.id,
+      title: this.formGroup.get('title').value,
+      start: this.formGroup.get('start').value,
+      sessionExerciseIds: this.formGroup.get('sessionExerciseIds').value
+    };
   }
 
   private initGroupForm() {
