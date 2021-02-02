@@ -30,7 +30,7 @@ export class SessionCreationDialogComponent implements OnInit {
   }
 
   createSession() {
-    this.newSession.sessionExerciseIds.push(this.formGroup.value.sessionExerciseIds);
+    this.newSession = this.getGroupFormValues();
     this.sessionService.create(this.newSession).subscribe(
       () => this.activeModal.close('Dialog closed')
       , () => this.toastService.showError('Oops, something bad happened. There are no exercises with that id.')
@@ -38,9 +38,18 @@ export class SessionCreationDialogComponent implements OnInit {
     );
   }
 
+  private getGroupFormValues(): Session {
+    return {
+      id: null,
+      title: this.formGroup.get('title').value,
+      start: this.formGroup.get('start').value,
+      sessionExerciseIds: this.formGroup.get('sessionExerciseIds').value.split(',')
+    };
+  }
+
   private initGroupForm() {
     this.formGroup = this.formBuilder.group({
-      title: new FormControl(this.newSession.title, Validators.required),
+      title: new FormControl(null, Validators.required),
       start: new FormControl({value: this.start, disabled: true}, Validators.required),
       sessionExerciseIds: new FormControl(null, Validators.required)
     });
